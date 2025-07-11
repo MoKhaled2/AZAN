@@ -1,0 +1,141 @@
+ body {
+    font-family: 'Tajawal', sans-serif;
+    background: radial-gradient(circle,rgba(238, 174, 202, 1) 29%, rgba(148, 187, 233, 1) 90%);min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+   
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  #city {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #2980b9;
+  }
+  #date {
+    font-size: 1.2rem;
+    margin: 5px 0 0;
+    color: #7f8c8d;
+  }
+  hr {
+    border: none;
+    height: 1px;
+    background-color: #ecf0f1;
+    margin: 20px 0;
+  }
+  .prayer-times {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .prayer-card {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  .prayer-card:hover {
+    transform: translateY(-5px);
+  }
+  .prayer-name {
+    background-color: #5828b0;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+  }
+  .prayer-time {
+    padding: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  .next-prayer{
+  border:6px solid #13a362;
+  transform:scale(1.04);
+  }
+  .city-selector {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 10px;
+  }
+  #citySelect {
+    background-color: #f8f9fa;
+    border: 2px solid #3498db;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-family: 'Tajawal', sans-serif;
+    color: #2c3e50;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  #citySelect:hover {
+    background-color: #e9f7fe;
+  }
+  #citySelect:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+  }
+  .date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  gap: 5px;
+}
+
+.gregorian-date {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.hijri-date {
+  font-size: 1.1rem;
+  color: #5828b0;
+  font-weight: bold;
+  background-color: #f0e6ff;
+  padding: 3px 10px;
+  border-radius: 15px;
+}
+@media (max-width: 600px) {
+  .gregorian-date,
+  .hijri-date {
+    font-size: 1rem;
+  text-align: center;
+  }
+}
+  @media (max-width: 600px) {
+    .prayer-card {
+      min-width: calc(50% - 20px);
+    }
+    #citySelect {
+      font-size: 1rem;
+      padding: 8px 15px;
+    }
+  }

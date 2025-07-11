@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مواقيت الصلاة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./AZANStyle.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 id="head">مواقيت الصلاة</h1>
+      <h2 id="city">القاهرة</h2>
+      <div id="date" class="date-container">
+        <div class="gregorian-date"></div>
+        <div class="hijri-date"></div>
+    </div>
+</div>
+    <hr>
+    <div class="prayer-times">
+      <div class="prayer-card">
+        <div class="prayer-name">الفجر</div>
+        <div class="prayer-time" id="fajr">4:50 ص</div>
+      </div>
+      <div class="prayer-card">
+        <div class="prayer-name">الشروق</div>
+        <div class="prayer-time" id="sunrise">6:15 ص</div>
+      </div>
+      <div class="prayer-card">
+        <div class="prayer-name">الظهر</div>
+        <div class="prayer-time" id="dhuhr">12:30 م</div>
+      </div>
+      <div class="prayer-card">
+        <div class="prayer-name">العصر</div>
+        <div class="prayer-time" id="asr">3:45 م</div>
+      </div>
+      <div class="prayer-card">
+        <div class="prayer-name">المغرب</div>
+        <div class="prayer-time" id="maghrib">6:20 م</div>
+      </div>
+      <div class="prayer-card">
+        <div class="prayer-name">العشاء</div>
+        <div class="prayer-time" id="isha">7:45 م</div>
+      </div>
+    </div>
+    <div class="city-selector">
+      <select id="citySelect">
+        <option value="Cairo">القاهرة</option>
+        <option value="Tanta">طنطا</option>
+        <option value="Alexandria">الاسكندرية</option>
+        <option value="Sinai">سيناء</option>
+      </select>
+    </div>
+  </div>
+  
+</body>
+<script src="./node_modules/axios/dist/axios.min.js"></script>
+  <script>
+    let cities=[{
+          ar:"القاهره",
+          en:"Cairo"
+        },
+        {
+          ar:"الاسكندريه",
+          en:"Alexandria"
+        },
+        {
+          ar:"طنطا",
+          en:"Tanta"
+        }
+    ]
+    document.getElementById("citySelect").innerHTML=""
+    for(city of cities){
+      let result=`<option>${city.ar}</option>`
+      document.getElementById("citySelect").innerHTML+=result
+    }
+    document.getElementById("citySelect").addEventListener("change",function()
+    {
+        let selection=this.value
+        let cityName=""
+        document.getElementById("city").innerHTML=selection
+        for(city of cities)
+        {
+          if(city.ar==selection)
+          {
+            cityName=city.en
+            break
+          }
+        }
+        getPrayersTime(cityName)
+
+    })
+     function getPrayersTime(cityName){
+          let params={
+          country:"EG",
+          city: cityName
+        }
+        axios.get("https://api.aladhan.com/v1/timingsByCity",{
+          params: params
+        }).then(function(response){
+          let currentPray=0
+          let timing=response.data.data
+          let day =timing.date.hijri.weekday.ar
+          document.getElementById("fajr").innerHTML = timing.timings.Fajr;
+          document.getElementById("sunrise").innerHTML = timing.timings.Sunrise;
+          document.getElementById("dhuhr").innerHTML = timing.timings.Dhuhr;
+          document.getElementById("asr").innerHTML = timing.timings.Asr;
+          document.getElementById("maghrib").innerHTML = timing.timings.Maghrib;
+          document.getElementById("isha").innerHTML = timing.timings.Isha;
+          document.querySelector(".gregorian-date").textContent =timing.date.hijri.weekday.ar+" "+ timing.date.readable ;
+          document.querySelector(".hijri-date").textContent = 
+            `${timing.date.hijri.day} ${timing.date.hijri.month.ar} ${timing.date.hijri.year} هـ `;
+
+          highlightNextPrayer(timing.timings);
+        }).catch(function(eror){
+          console.log(eror)
+        })
+    }
+  function highlightNextPrayer(times){
+      const order = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+      document.querySelectorAll('.prayer-card').forEach(c=>c.classList.remove('next-prayer'));
+      const now = new Date();
+
+      for (const key of order){
+        const cleanedTime = times[key].replace(/[^\d:]/g, '');
+        const [h, m] = cleanedTime.split(':').map(Number);
+        const t = new Date();
+        t.setHours(h, m, 0, 0);
+
+        if (t > now){
+          document.getElementById(key.toLowerCase()).parentElement.classList.add('next-prayer');
+          if (key == "Isha")
+            document.getElementById("head").innerHTML = "مواقيت الصلاة🌜";
+          else
+            document.getElementById("head").innerHTML = "مواقيت الصلاة🌞";
+          return;
+        }
+      }
+
+      document.getElementById('fajr').parentElement.classList.add('next-prayer');
+      document.getElementById("head").innerHTML="مواقيت الصلاة🌜"
+    }
+
+
+     function getDefaultCity()
+    {
+      getPrayersTime("Cairo")
+    }
+     getDefaultCity()
+
+     
+  </script>
+</html>
